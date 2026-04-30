@@ -1,0 +1,263 @@
+/* --- 1. GRUNDLAGEN & VARIABLEN --- */
+:root {
+    --primary-green: #2E7D32;   /* Das typische Moschee-Grün */
+    --gold-accent: #D4AF37;     /* Gold für Wochentag & Iqamah */
+    --bg-dark: #000000;         /* Tiefschwarz */
+    --card-bg: rgba(26, 26, 26, 0.85); /* Auf Transparenz geändert für Hintergrund-Logo */
+    --text-main: #ffffff;
+    --text-muted: #aaaaaa;
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --bg-dark: #f2f2f2;      /* Hellgrauer Hintergrund */
+        --card-bg: rgba(255, 255, 255, 0.9); /* Auf Transparenz geändert */
+        --text-main: #1a1a1a;    /* Fast schwarzer Text */
+        --text-muted: #555555;   /* Dunkelgrauer Text für weniger wichtiges */
+    }
+    
+    /* Optional: Den grünen Rahmen bei Jumu'ah im Hell-Modus etwas kräftiger machen */
+    .jumuah-container {
+        background: rgba(46, 125, 50, 0.05);
+    }
+}
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-dark);
+    
+    /* --- LOGO HINTERGRUND LOGIK START --- */
+    background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('Logo.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: contain; 
+    /* --- LOGO HINTERGRUND LOGIK ENDE --- */
+
+    color: var(--text-main);
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 450px; 
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* --- 2. HEADER & LOGO (Hauptseite) --- */
+header {
+    text-align: center;
+    padding: 10px 0;
+}
+
+.logo {
+    width: 100px;
+    height: auto;
+    margin-bottom: 8px;
+}
+
+.mosque-name {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--primary-green);
+    letter-spacing: 1px;
+}
+
+.subtitle {
+    font-size: 0.9rem;
+    color: var(--text-main);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* --- 3. GRÜNE INFO-BOX (Uhr & Datum) --- */
+.live-info {
+    background: var(--primary-green);
+    color: white;
+    padding: 25px 20px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.big-clock {
+    font-size: 4rem;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.date-container {
+    display: flex;
+    gap: 12px;
+    background: rgba(0, 0, 0, 0.25);
+    padding: 8px 18px;
+    border-radius: 12px;
+    margin: 5px 0;
+}
+
+.date-label {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--gold-accent);
+}
+
+.live-date {
+    font-size: 1.4rem;
+    font-weight: 800;
+}
+
+/* --- 4. GEBETSZEITEN LISTE --- */
+.prayer-card {
+    background: var(--card-bg);
+    border-radius: 25px;
+    padding: 10px 5px;
+    backdrop-filter: blur(5px); /* Macht Hintergrund hinter Karte leicht unscharf */
+}
+
+.prayer-group {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 18px 0;
+}
+
+.prayer-group:last-child {
+    border-bottom: none;
+}
+
+.prayer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    width: 100%;
+}
+
+.prayer-name {
+    font-size: 1.5rem;
+    font-weight: 800;
+    flex: 1;
+    text-align: left;
+}
+
+.prayer-time {
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: var(--primary-green);
+    min-width: 110px;
+    text-align: right;
+}
+
+.iqamah-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 20px 0 20px;
+    color: var(--gold-accent);
+}
+
+.iq-label {
+    font-size: 1.2rem;
+    font-weight: 800;
+}
+
+.iq-time {
+    font-size: 1.7rem;
+    font-weight: 900;
+    min-width: 110px;
+    text-align: right;
+}
+
+/* --- 5. JUMU'AH / DŽUMA BOX --- */
+.jumuah-container {
+    margin: 15px 0;
+    background: rgba(46, 125, 50, 0.2); /* Etwas transparenter gemacht */
+    border-radius: 20px;
+    padding: 20px;
+    border: 2px solid var(--primary-green);
+    backdrop-filter: blur(5px);
+}
+
+/* --- 6. SPRACHAUSWAHL (index.html) --- */
+.language-selection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100%;
+    padding: 20px;
+}
+
+.selection-logo {
+    width: 140px; /* Logo-Größe gefixt */
+    height: auto;
+    margin-bottom: 30px;
+}
+
+.selection-title {
+    font-size: 1.8rem;
+    margin-bottom: 40px;
+    text-align: center;
+    line-height: 1.4;
+    color: white;
+}
+
+.selection-title span {
+    color: var(--text-muted);
+    font-size: 1.3rem;
+    font-weight: 400;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 320px;
+}
+
+.lang-btn {
+    background-color: var(--primary-green) !important; /* Button-Farbe gefixt */
+    color: white !important;
+    border: none;
+    padding: 22px;
+    border-radius: 18px;
+    font-size: 1.6rem;
+    font-weight: 800;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.lang-btn:active {
+    transform: scale(0.96);
+    filter: brightness(0.9);
+}
+
+/* --- 7. FOOTER NAVIGATION --- */
+.footer-nav {
+    text-align: center;
+    padding: 20px 0;
+}
+
+.lang-switch-link {
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    display: block;
+}
