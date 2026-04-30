@@ -1,0 +1,284 @@
+/* -------------------------
+    Globale Variablen & Theme-Logik
+   ------------------------- */
+:root {
+    --primary-green: #2E7D32;
+    --bg-dark: #000000;
+    --card-bg: rgba(20, 20, 20, 0.95);
+    --gold: #D4AF37;
+    --text-white: #ffffff;
+    --muted: #888888;
+    --glass: rgba(255, 255, 255, 0.05);
+    --iqamah-color: #7EC8E3; 
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --bg-dark: #f4f4f4;
+        --card-bg: #ffffff;
+        --text-white: #1a1a1a;
+        --muted: #555555;
+    }
+}
+
+/* MASTER-SKALIERUNG FÜR HANDY */
+html {
+    font-size: 16px; 
+}
+
+/* -------------------------
+    Reset & Basis
+   ------------------------- */
+* { 
+    box-sizing: border-box; 
+    margin: 0; 
+    padding: 0; 
+}
+
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-white);
+    min-height: 100vh;
+    width: 100vw;
+    overflow-x: hidden;
+    overflow-y: auto; 
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: url('Logo.png') no-repeat center;
+    background-size: 50% auto;
+    opacity: 0.05;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* FIX: Alle Zahlen einheitlich & kein Wackeln mehr */
+.big-clock, .timer-digits, .prayer-time, .iq-time {
+    font-family: 'Inter', sans-serif !important;
+    font-variant-numeric: tabular-nums; /* Verhindert das Hin- und Herschieben */
+    letter-spacing: -1px;
+}
+
+/* -------------------------
+    SPRACHAUSWAHL
+   ------------------------- */
+.language-selection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+    text-align: center;
+}
+
+.selection-logo { 
+    width: 10rem; 
+    height: auto; 
+    margin-bottom: 2rem; 
+}
+
+.selection-title { 
+    font-size: 2rem; 
+    font-weight: 800; 
+    line-height: 1.2; 
+    text-transform: uppercase;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 20rem;
+    margin-top: 2rem;
+}
+
+.lang-btn {
+    padding: 1rem;
+    font-size: 1.2rem;
+    font-weight: 800;
+    background: var(--primary-green);
+    color: white;
+    text-decoration: none;
+    border-radius: 12px;
+}
+
+/* -------------------------
+    HAUPT-LAYOUT (Handy-Optimiert)
+   ------------------------- */
+.app-container {
+    display: flex;
+    flex-direction: column; 
+    width: 100%;
+    padding: 20px 15px; 
+    gap: 25px;
+    align-items: center;
+}
+
+.main-display {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.side-logo { 
+    width: 7rem; 
+    height: auto; 
+    margin-bottom: 1rem; 
+}
+
+.mosque-name { 
+    font-size: 2.2rem; 
+    font-weight: 900; 
+    color: var(--primary-green); 
+    line-height: 1.1;
+    text-align: center;
+}
+
+.subtitle { 
+    font-size: 1.1rem; 
+    color: var(--gold); 
+    font-weight: 700; 
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.live-info {
+    background: var(--primary-green);
+    width: 100%;
+    padding: 1.5rem; 
+    border-radius: 25px;
+    text-align: center;
+    color: #ffffff;
+}
+
+.big-clock { 
+    font-size: 4.5rem; 
+    font-weight: 900; 
+    line-height: 1; 
+    margin-bottom: 0.5rem; 
+    display: block; /* Stellt sicher, dass es mittig steht */
+}
+
+.date-container { 
+    font-size: 1.2rem; 
+    margin-bottom: 1rem; 
+}
+
+#hijri-date { 
+    font-size: 1.1rem; 
+}
+
+.countdown-container {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0.8rem;
+    border-radius: 15px;
+}
+
+.timer-digits { 
+    font-size: 2.8rem; 
+}
+
+/* -------------------------
+    GEBETSLISTE
+   ------------------------- */
+.prayer-list-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.prayer-card {
+    display: flex;
+    flex-direction: column; 
+    gap: 12px;
+}
+
+.prayer-group {
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 10px 15px; /* FIX: Kästchen etwas kleiner */
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important; /* Nutzt volle Breite */
+    border-left: 7px solid var(--primary-green);
+}
+
+/* Zeile für Name und Zeit */
+.prayer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.prayer-name { 
+    font-size: 1.2rem; /* Etwas kleiner für Handy */
+    color: var(--gold); 
+}
+
+.prayer-time { 
+    font-size: 2.5rem; /* FIX: Zeit etwas kleiner */
+    color: var(--primary-green); 
+    text-align: right !important;
+}
+
+/* IKAMET / IQAMAH */
+.iqamah-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; 
+    margin-top: 5px;
+    padding-top: 5px;
+    border-top: 1px solid rgba(128, 128, 128, 0.2);
+}
+
+.iq-label { font-size: 0.9rem; }
+.iq-time { font-size: 1.6rem; }
+
+/* DŽUMA - FIX: Name links, Zeit rechts */
+.jumuah-container {
+    background: var(--card-bg);
+    border: 2px solid var(--primary-green);
+    border-radius: 15px;
+    padding: 12px 18px;
+    display: flex !important;
+    flex-direction: row !important; /* Nebeneinander */
+    justify-content: space-between !important; /* Schiebt Zeit in die Ecke */
+    align-items: center !important;
+}
+
+/* -------------------------
+    FUSSZEILE (Fix wie Bild 2)
+   ------------------------- */
+.footer-nav {
+    position: relative; 
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center; /* Mittig */
+    gap: 15px;
+    align-items: center;
+    padding-top: 15px;
+    border-top: 1px solid rgba(128, 128, 128, 0.2);
+}
+
+.lang-switch-link-green {
+    font-size: 1rem;
+    padding: 8px 18px;
+    color: var(--gold);
+    text-decoration: none;
+    border: 1px solid var(--gold); /* Goldener Rand wie gewünscht */
+    border-radius: 10px;
+    font-weight: 700;
+}
