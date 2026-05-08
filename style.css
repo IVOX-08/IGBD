@@ -1,0 +1,598 @@
+/* =========================================================
+    Globale Variablen & Theme-Logik
+   ========================================================= */
+:root {
+    --primary-green: #2E7D32;
+    --bg-dark: #000000;
+    --card-bg: rgba(20, 20, 20, 0.95);
+    --gold: #D4AF37;
+    --text-white: #ffffff;
+    --muted: #888888;
+    --glass: rgba(255, 255, 255, 0.05);
+    --iqamah-color: #7EC8E3;
+
+    /* FIX #5: Aktive Gebetsbox */
+    --active-bg: #2E7D32;
+    --active-border: #66BB6A;
+}
+
+/* Automatischer Hell-Modus */
+@media (prefers-color-scheme: light) {
+    :root {
+        --bg-dark: #f4f4f4;
+        --card-bg: #ffffff;
+        --text-white: #1a1a1a;
+        --muted: #555555;
+    }
+}
+
+/* MASTER-SKALIERUNG — skaliert alles proportional */
+html {
+    font-size: min(0.95vw, 15px);
+}
+
+/* =========================================================
+    Reset & Basis
+   ========================================================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* GLOBALER FIX: Zahlen wackeln nicht mehr */
+.big-clock, .timer-digits, .prayer-time, .iq-time {
+    font-family: 'Inter', sans-serif !important;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -1px;
+}
+
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-white);
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: url('Logo.png') no-repeat center;
+    background-size: 25% auto;
+    opacity: 0.05;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* =========================================================
+    FIX #3: PWA Installationsbanner
+   ========================================================= */
+.pwa-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: rgba(20, 20, 20, 0.97);
+    border-bottom: 3px solid var(--primary-green);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    flex-wrap: wrap;
+}
+
+.pwa-banner-content {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.pwa-banner-logo {
+    width: 3.5rem;
+    height: auto;
+    border-radius: 10px;
+}
+
+.pwa-banner-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.pwa-banner-text strong {
+    font-size: 1.4rem;
+    color: var(--text-white);
+    font-weight: 800;
+}
+
+.pwa-banner-text span {
+    font-size: 1rem;
+    color: var(--muted);
+}
+
+.pwa-banner-buttons {
+    display: flex;
+    gap: 0.8rem;
+}
+
+.pwa-btn {
+    padding: 0.7rem 1.8rem;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.2s;
+}
+
+.pwa-btn:hover { transform: scale(1.04); }
+
+.pwa-btn-yes {
+    background: var(--primary-green);
+    color: white;
+}
+
+.pwa-btn-no {
+    background: var(--glass);
+    color: var(--muted);
+    border: 1px solid rgba(128,128,128,0.3);
+}
+
+/* =========================================================
+    SPRACHAUSWAHL (index.html)
+   ========================================================= */
+.language-selection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 2rem;
+    text-align: center;
+}
+
+/* FIX #2: Logo deutlich größer */
+.selection-logo {
+    width: 20rem;
+    height: auto;
+    margin-bottom: 2rem;
+}
+
+.selection-title {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.selection-title span {
+    display: block;
+    color: var(--muted);
+    font-size: 1.8rem;
+    margin-top: 0.5rem;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    width: 100%;
+    max-width: 28rem;
+    margin-top: 2.5rem;
+}
+
+.lang-btn {
+    padding: 1.2rem;
+    font-size: 1.6rem;
+    font-weight: 800;
+    background: var(--primary-green);
+    color: white;
+    text-decoration: none;
+    border-radius: 15px;
+    transition: transform 0.2s, background 0.2s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    border: none;
+    cursor: pointer;
+}
+
+.lang-btn:hover {
+    background: #1b5e20;
+    transform: scale(1.03);
+}
+
+/* =========================================================
+    HAUPT-LAYOUT (TV-Optimiert)
+   ========================================================= */
+.app-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    padding: 2.5vh 4vw;
+    gap: 3vw;
+    align-items: center;
+}
+
+/* Linke Spalte */
+.main-display {
+    flex: 0 0 36%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+/* FIX #2: Logo größer auf TV */
+.side-logo {
+    width: 32rem;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+    display: block;
+}
+
+.mosque-name {
+    font-size: 4rem;
+    font-weight: 900;
+    color: var(--primary-green);
+    line-height: 1;
+    text-align: center;
+}
+
+.subtitle {
+    font-size: 1.6rem;
+    color: var(--gold);
+    font-weight: 700;
+    text-align: center;
+}
+
+.live-info {
+    background: var(--primary-green);
+    width: 100%;
+    padding: 2.2rem;
+    border-radius: 35px;
+    text-align: center;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+    color: #ffffff;
+}
+
+.big-clock {
+    font-size: 7.5rem;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.date-container {
+    font-size: 1.9rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+#hijri-date {
+    color: var(--gold);
+    font-size: 1.5rem;
+}
+
+.countdown-container {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1.2rem 1.5rem;
+    border-radius: 25px;
+}
+
+/* FIX #8: "Nächstes Gebet" gleich groß wie Datum */
+.next-label {
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+    opacity: 0.9;
+    letter-spacing: 0.02em;
+}
+
+.timer-digits {
+    font-size: 4.5rem;
+    font-weight: 800;
+}
+
+/* =========================================================
+    Rechte Spalte: Gebetsliste
+   ========================================================= */
+.prayer-list-container {
+    flex: 1;
+    height: 95%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.8vh;
+    min-height: 0;
+}
+
+.tv-header {
+    text-align: center;
+    padding-bottom: 0.4vh;
+}
+
+/* FIX #6 & #7: Grid — 2 Spalten, füllt verfügbare Höhe */
+.prayer-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1vw;
+    flex: 1;
+}
+
+/* =========================================================
+    FIX #7: Vertikales Gebetsbox-Layout
+    Oben: Name → Zeit → Trennlinie → Iqamah rechts
+   ========================================================= */
+.prayer-group {
+    background: var(--card-bg);
+    border-radius: 18px;
+    padding: 1.2rem 1.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    border-left: 9px solid var(--primary-green);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: background 0.3s ease, border-color 0.3s ease;
+    gap: 0.2rem;
+}
+
+/* Name oben links */
+.prayer-name {
+    font-size: clamp(1.2rem, 1.8vw, 2.8rem);
+    font-weight: 800;
+    color: var(--gold);
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Zeit groß darunter */
+.prayer-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.prayer-time {
+    font-size: clamp(2.5rem, 4.5vw, 6.5rem);
+    font-weight: 900;
+    color: var(--primary-green);
+    line-height: 1;
+    white-space: nowrap;
+}
+
+/* =========================================================
+    IKAMET / IQAMAH
+   ========================================================= */
+.iqamah-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.iq-label {
+    font-size: clamp(0.8rem, 1.1vw, 1.6rem);
+    font-weight: 700;
+    color: var(--primary-green);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+}
+
+.iq-time {
+    font-size: clamp(1.6rem, 3vw, 4.2rem);
+    font-weight: 800;
+    color: var(--gold);
+    line-height: 1;
+    white-space: nowrap;
+}
+
+/* FIX #7: Sunrise/Shuruq — Linie ohne Iqamah-Text
+   HTML: <div class="iqamah-row sunrise-spacer"></div> hinzufügen */
+.sunrise-spacer {
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    margin-top: 0.5rem;
+    padding-top: 0;
+    min-height: 0.4rem;
+}
+
+/* =========================================================
+    FIX #5: Aktive Gebetsbox (nächstes Gebet = grün)
+    JS setzt/entfernt die Klasse .prayer-group--active
+   ========================================================= */
+.prayer-group--active {
+    background: var(--active-bg) !important;
+    border-left-color: var(--active-border) !important;
+    box-shadow: 0 0 25px rgba(102, 187, 106, 0.35) !important;
+}
+
+/* Grüne Zeit → weiß wenn aktiv */
+.prayer-group--active .prayer-time {
+    color: #ffffff !important;
+}
+
+/* Grünes Iqamah-Label → weiß wenn aktiv */
+.prayer-group--active .iq-label {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Trennlinie heller wenn aktiv */
+.prayer-group--active .iqamah-row {
+    border-top-color: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* prayer-name (gold) und iq-time (gold) bleiben unverändert */
+
+/* =========================================================
+    FIX #9: Jumu'ah — Zeit ganz nach rechts mit Abstand
+   ========================================================= */
+.jumuah-container {
+    background: var(--card-bg);
+    border: 3px solid var(--primary-green);
+    border-radius: 18px;
+    padding: 1rem 2rem;
+    margin-top: 0.6rem;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 3vw;                   /* expliziter Mindestabstand */
+}
+
+/* =========================================================
+    FUSSZEILE
+   ========================================================= */
+.footer-nav {
+    position: fixed;
+    bottom: 2vh;
+    right: 4vw;
+    width: 58%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(128, 128, 128, 0.2);
+}
+
+.lang-switch-link-green {
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.2rem;
+    padding: 8px 20px;
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    background: var(--glass);
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.lang-switch-link-green:hover {
+    background: var(--primary-green);
+    color: white;
+    border-color: var(--primary-green);
+}
+
+/* =========================================================
+    FIX #6: Großer TV (1920px+) — alles etwas größer
+   ========================================================= */
+@media (min-width: 1920px) {
+    html           { font-size: min(1.1vw, 18px); }
+    .side-logo     { width: 35rem; margin-bottom: 6rem; }
+    .big-clock     { font-size: 9rem; }
+    .timer-digits  { font-size: 5.5rem; }
+    .next-label    { font-size: 2.2rem; }
+    .date-container { font-size: 2.2rem; }
+    #hijri-date    { font-size: 1.8rem; }
+    .mosque-name   { font-size: 5rem; }
+    .subtitle      { font-size: 2rem; }
+    .prayer-group  { padding: 1.5rem 2.2rem; border-radius: 22px; }
+    .jumuah-container { border-radius: 22px; padding: 1.2rem 2.5rem; }
+}
+
+/* =========================================================
+    MOBILE (≤ 1024px) — bestehende Mobile-Styles
+   ========================================================= */
+@media (max-width: 1024px) {
+    html  { font-size: 16px; }
+    body  { overflow-y: auto; height: auto; }
+
+    .app-container {
+        flex-direction: column;
+        height: auto;
+        padding: 15px;
+        gap: 20px;
+    }
+
+    .main-display {
+        flex: none;
+        width: 100%;
+    }
+
+    .side-logo     { width: 6rem; }
+    .mosque-name   { font-size: 1.8rem; }
+    .subtitle      { font-size: 1rem; }
+
+    .live-info     { padding: 1.2rem; border-radius: 20px; }
+    .big-clock     { font-size: 16vw; }
+    .date-container { font-size: 1.1rem; margin-bottom: 0.8rem; }
+    #hijri-date    { font-size: 1rem; }
+
+    .countdown-container { padding: 0.8rem; border-radius: 12px; }
+    .next-label    { font-size: 1.1rem; }
+    .timer-digits  { font-size: 2.5rem; }
+
+    .prayer-list-container { height: auto; }
+
+    .prayer-card {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        flex: none;
+    }
+
+    .prayer-group  {
+        border-radius: 14px;
+        padding: 10px 14px;
+        border-left-width: 6px;
+    }
+
+    .prayer-name   { font-size: 1.2rem; }
+    .prayer-time   { font-size: 2.8rem; }
+    .iq-label      { font-size: 0.85rem; }
+    .iq-time       { font-size: 1.8rem; }
+
+    .iqamah-row    { margin-top: 6px; padding-top: 6px; }
+    .sunrise-spacer { min-height: 6px; margin-top: 6px; }
+
+    .jumuah-container {
+        border-radius: 14px;
+        padding: 10px 16px;
+        margin-top: 10px;
+        border-width: 2px;
+        gap: 12px;
+    }
+
+    .footer-nav {
+        position: relative;
+        bottom: auto; right: auto;
+        width: 100%;
+        justify-content: center;
+        margin-top: 15px;
+        margin-bottom: 25px;
+    }
+
+    .lang-switch-link-green { font-size: 1rem; width: 100%; text-align: center; }
+}
+
+/* =========================================================
+    SEHR KLEINES HANDY (≤ 380px)
+   ========================================================= */
+@media (max-width: 380px) {
+    .big-clock     { font-size: 18vw; }
+    .prayer-time   { font-size: 2.4rem; }
+    .iq-time       { font-size: 1.5rem; }
+    .prayer-name   { font-size: 1rem; }
+}
