@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kassel Vaktija - Sprachauswahl</title>
+
+    <!-- SCHRITT 1: Gerät erkennen & richtiges CSS laden -->
+    <script src="device-detect.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="Logo.png">
+    <link rel="icon" type="image/png" href="Logo.png">
+    <meta name="apple-mobile-web-app-title" content="Kassel Vaktija">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#2E7D32">
+    
+</head>
+<body>
+
+    <div class="language-selection">
+        <img src="Logo.png" alt="IGBD Logo" class="selection-logo">
+
+        <h1 class="selection-title">
+            IZABERITE JEZIK
+            <span>SPRACHE WÄHLEN</span>
+        </h1>
+
+        <div class="button-container">
+            <button class="lang-btn" onclick="selectLanguage('bs')">BOSANSKI</button>
+            <button class="lang-btn" onclick="selectLanguage('de')">DEUTSCH</button>
+            <button class="lang-btn" onclick="selectLanguage('ar')">العربية</button>
+            <button class="lang-btn" onclick="selectLanguage('tr')">TÜRKÇE</button>
+        </div>
+
+        <p style="margin-top:2rem; color:var(--muted); font-size:0.85rem; font-weight:600;">
+            IGBD — Sandžak Kassel
+        </p>
+    </div>
+
+    <script>
+        // Sprache in localStorage speichern & weiterleiten
+        var langMap = { bs:'bs.html', de:'de.html', ar:'ar.html', tr:'tr.html' };
+
+        // Beim Laden: gespeicherte Sprache automatisch laden
+        (function() {
+            var saved = localStorage.getItem('vaktija_lang');
+            if (saved && langMap[saved]) {
+                window.location.replace(langMap[saved]);
+            }
+        })();
+
+        function selectLanguage(lang) {
+            localStorage.setItem('vaktija_lang', lang);
+            window.location.href = langMap[lang];
+        }
+
+        // PWA Prompt
+        var deferredPrompt = null;
+        window.addEventListener('beforeinstallprompt', function(e) {
+            e.preventDefault();
+            deferredPrompt = e;
+            var dismissed = localStorage.getItem('pwa_dismissed');
+            if (!dismissed || Date.now() > parseInt(dismissed)) {
+                var banner = document.getElementById('pwa-install-banner');
+                if (banner) banner.style.display = 'flex';
+            }
+        });
+    </script>
+</body>
+</html>
