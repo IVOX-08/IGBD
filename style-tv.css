@@ -1,0 +1,426 @@
+/* =============================================================
+   style-tv.css — VOLLSTÄNDIGE VERSION (NICHT GEKÜRZT)
+   TV 85", 4K, Full-HD Layout & Index/PWA Fixes
+   ============================================================= */
+
+:root {
+    --primary-green: #2E7D32;
+    --bg-dark: #f4f4f4;       /* Heller Hintergrund für die ganze Seite */
+    --card-bg: #ffffff;       /* Weiße Gebetskarten */
+    --gold: #b8860b;          /* Dunkleres Gold */
+    --text-white: #1a1a1a;    /* Dunkle Schriftart */
+    --muted: #666666;         /* Grauer Text */
+    --glass: rgba(0, 0, 0, 0.05);
+    --active-bg: #2E7D32;     /* Grüner Hintergrund für aktives Gebet */
+    --active-border: #1b5e20;
+}
+
+/* ── Zahlen wackeln nicht ── */
+.big-clock, .timer-digits, .prayer-time, .iq-time {
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -1px;
+    font-family: 'Inter', sans-serif !important;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden !important;   /* Kein Scrollen auf TV */
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-white);
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Subtiles Wasserzeichen */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: url('Logo.png') no-repeat center;
+    background-size: 20% auto;
+    opacity: 0.04;
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* =============================================================
+   HAUPT-LAYOUT — Nebeneinander (Links: Uhr | Rechts: Gebete)
+   ============================================================= */
+.app-container {
+    display: flex !important;
+    flex-direction: row !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    padding: 2vh 2.5vw;
+    gap: 2vw;
+    align-items: stretch;
+    overflow: hidden !important;
+}
+
+/* ── Linke Spalte ── */
+.main-display {
+    /* WICHTIG: Feste Breite von 28%, damit die Uhr nicht verdeckt wird */
+    flex: 0 0 28% !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5vh;
+    overflow: hidden;
+}
+
+.side-logo {
+    /* Größe: Kompakt */
+    width: 10rem !important; 
+    height: auto;
+    
+    /* WICHTIG: Weißer Hintergrund entfernen & keine Ei-Form */
+    background: transparent !important;
+    mix-blend-mode: multiply; 
+    filter: none !important;
+    border-radius: 0 !important;
+    
+    display: block;
+    margin: 0 auto 2vh auto;
+}
+
+.mosque-name {
+    font-size: clamp(2rem, 3.5vw, 5rem);
+    font-weight: 900;
+    color: var(--primary-green);
+    line-height: 1;
+    text-align: center;
+}
+
+.subtitle {
+    font-size: clamp(1rem, 1.5vw, 2.2rem);
+    color: var(--gold);
+    font-weight: 700;
+    text-align: center;
+}
+
+/* ── Grüne Info-Box ── */
+.live-info {
+    background: var(--primary-green);
+    width: 100%;
+    padding: clamp(1.5rem, 2.5vh, 3rem) clamp(1rem, 1.5vw, 2.5rem);
+    border-radius: 2.5vw;
+    text-align: center;
+    box-shadow: 0 1vh 4vh rgba(0,0,0,0.5);
+    color: #fff;
+    flex-shrink: 0;
+}
+
+.big-clock {
+    /* KORREKTUR: Schriftgröße verkleinert, damit die Sekunden immer in die Box passen */
+    font-size: clamp(2.5rem, 5.5vw, 7.5rem) !important;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 0.8vh;
+    display: block;
+}
+
+.date-container {
+    font-size: clamp(0.9rem, 1.6vw, 2.5rem);
+    font-weight: 700;
+    margin-bottom: 1.2vh;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3vh;
+    line-height: 1.3;
+}
+
+#hijri-date {
+    color: var(--gold);
+    font-size: clamp(0.8rem, 1.3vw, 2rem);
+}
+
+.countdown-container {
+    background: rgba(0,0,0,0.22);
+    padding: clamp(0.5rem, 1vh, 1.5rem);
+    border-radius: 1.5vw;
+}
+
+.next-label {
+    font-size: clamp(0.7rem, 1.2vw, 1.8rem);
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 0.3vh;
+    opacity: 0.9;
+    letter-spacing: 0.05em;
+}
+
+.timer-digits {
+    font-size: clamp(1.8rem, 4.5vw, 6.5rem);
+    font-weight: 800;
+}
+
+/* =============================================================
+   Rechte Spalte: Gebetsliste
+   ============================================================= */
+.prayer-list-container {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    gap: 1vh;
+}
+
+.tv-header {
+    text-align: center;
+    flex-shrink: 0;
+    padding-bottom: 0.5vh;
+}
+
+/* ── 2-Spalten-Grid ── */
+.prayer-card {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 1vh 1.2vw;
+    flex: 1;
+    min-height: 0; 
+    overflow: hidden;
+}
+
+/* =============================================================
+   Gebetsbox
+   ============================================================= */
+.prayer-group {
+    background: var(--card-bg);
+    border-radius: 1.5vw;
+    padding: 1vh 1.5vw;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center;
+    border-left: 0.6vw solid var(--primary-green);
+    transition: background 0.3s, border-color 0.3s;
+    overflow: hidden;
+    min-height: 0;
+}
+
+.prayer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1vw;
+    flex-wrap: nowrap;
+    width: 100%;
+}
+
+.prayer-name {
+    font-size: clamp(1rem, 1.6vw, 2.8rem);
+    font-weight: 800;
+    color: var(--gold);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 1;
+}
+
+.prayer-time {
+    font-size: clamp(2rem, 4vw, 7.5rem);
+    font-weight: 900;
+    color: var(--primary-green);
+    line-height: 1;
+    white-space: nowrap;
+    flex-shrink: 0;
+    text-align: right;
+}
+
+/* KORREKTUR: Sichtbarer Strich in allen Boxen */
+.iqamah-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 1vh;
+    padding-top: 1vh;
+    /* Hier ist die deutliche graue Trennlinie */
+    border-top: 2px solid rgba(0, 0, 0, 0.15) !important; 
+}
+
+.iq-label {
+    font-size: clamp(0.7rem, 1vw, 1.6rem);
+    font-weight: 700;
+    color: var(--primary-green);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    white-space: nowrap;
+}
+
+.iq-time {
+    font-size: clamp(1.3rem, 2.8vw, 5rem);
+    font-weight: 800;
+    color: var(--gold);
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.sunrise-spacer {
+    border-top: 2px solid rgba(0, 0, 0, 0.15);
+    margin-top: 0.6vh;
+    min-height: 0.4vh;
+}
+
+/* =============================================================
+   Aktive Gebetsbox (nächstes Gebet)
+   ============================================================= */
+.prayer-group--active {
+    background: var(--active-bg) !important;
+    border-left-color: var(--active-border) !important;
+    box-shadow: 0 0 3vh rgba(46, 125, 50, 0.4) !important;
+}
+.prayer-group--active .prayer-time { color: #fff !important; }
+.prayer-group--active .iq-label    { color: rgba(255,255,255,0.9) !important; }
+.prayer-group--active .iqamah-row  { border-top-color: rgba(255,255,255,0.3) !important; }
+
+/* =============================================================
+   Jumu'ah
+   ============================================================= */
+.jumuah-container {
+    background: var(--card-bg);
+    border: 0.3vw solid var(--primary-green);
+    border-radius: 1.5vw;
+    padding: 1vh 2vw;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 3vw;
+    flex-shrink: 0;
+}
+
+/* =============================================================
+   Fußzeile
+   ============================================================= */
+.footer-nav {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-top: 0.5vh;
+    border-top: 1px solid rgba(128,128,128,0.2);
+    flex-shrink: 0;
+}
+
+.lang-switch-link-green {
+    color: var(--gold);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: clamp(0.8rem, 1.2vw, 2rem);
+    padding: 0.6vh 1.5vw;
+    border: 1px solid rgba(212,175,55,0.4);
+    border-radius: 1vw;
+    background: var(--glass);
+    transition: all 0.3s;
+    display: inline-block;
+}
+
+.lang-switch-link-green:hover {
+    background: var(--primary-green);
+    color: white;
+}
+
+/* =============================================================
+   PWA Banner (Komplett erhalten)
+   ============================================================= */
+.pwa-banner {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 9999;
+    background: rgba(20,20,20,0.97);
+    border-bottom: 3px solid var(--primary-green);
+    padding: 1vh 2vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5vw;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+.pwa-banner-content { display: flex; align-items: center; gap: 1vw; }
+.pwa-banner-logo    { width: 4vw; max-width: 5rem; height: auto; border-radius: 10px; }
+.pwa-banner-text    { display: flex; flex-direction: column; }
+.pwa-banner-text strong { font-size: clamp(1rem, 1.5vw, 2rem); color: #fff; font-weight: 800; }
+.pwa-banner-text span   { font-size: clamp(0.8rem, 1vw, 1.4rem); color: var(--muted); }
+.pwa-banner-buttons { display: flex; gap: 0.8vw; }
+.pwa-btn { padding: 0.8vh 2vw; border-radius: 0.8vw; font-size: clamp(0.9rem, 1.2vw, 1.8rem); font-weight: 700; cursor: pointer; border: none; }
+.pwa-btn-yes { background: var(--primary-green); color: white; }
+.pwa-btn-no  { background: var(--glass); color: var(--muted); border: 1px solid rgba(128,128,128,0.3); }
+
+/* =============================================================
+   SPRACHAUSWAHL (index.html) - FEHLERBEHEBUNG FÜR BILD image_9f4cc0.png
+   ============================================================= */
+.language-selection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;       /* Zentriert ALLES in der Mitte */
+    justify-content: center;   /* Zentriert ALLES in der Mitte */
+    height: 100vh;
+    width: 100vw;              /* WICHTIG: Nimmt den ganzen Bildschirm ein */
+    padding: 2rem;
+    text-align: center;
+    overflow: hidden;
+    background: var(--bg-dark); 
+}
+
+.selection-logo {
+    width: clamp(15rem, 30vw, 35rem) !important;
+    height: auto;
+    margin-bottom: 4vh;
+    border-radius: 0 !important;
+    background: transparent !important;
+    mix-blend-mode: multiply; /* Weißer Kasten ist weg */
+    filter: none !important;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.selection-title {
+    font-size: clamp(2rem, 4vw, 6rem);
+    font-weight: 800;
+    line-height: 1.2;
+    text-transform: uppercase;
+    width: 100%;
+}
+
+.selection-title span {
+    display: block;
+    color: var(--muted);
+    font-size: clamp(1.2rem, 2.5vw, 3.5rem);
+    margin-top: 0.5rem;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: row;       
+    flex-wrap: wrap;           
+    gap: 2vw;
+    margin-top: 3vh;
+    width: 100%;
+    max-width: 90vw;
+    justify-content: center;   /* Hält die Buttons sauber mittig */
+}
+
+.lang-btn {
+    padding: 1.5vh 3vw;
+    font-size: clamp(1.2rem, 2.2vw, 3.5rem);
+    font-weight: 800;
+    background: var(--primary-green);
+    color: white;
+    border: none;
+    border-radius: 1.5vw;
+    cursor: pointer;
+    transition: transform 0.2s, background 0.2s;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    min-width: 15vw;
+    text-align: center;
+}
+
+.lang-btn:hover {
+    background: #1b5e20;
+    transform: scale(1.04);
+}
