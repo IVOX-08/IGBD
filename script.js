@@ -2,7 +2,8 @@
   'use strict';
 
   const CONFIG = {
-    csvUrl: 'Gebetszeiten.csv',
+    // HIER GEÄNDERT: Dein neuer GitHub Raw-Link
+    csvUrl: 'https://raw.githubusercontent.com/IVOX-08/juply6202/refs/heads/main/Gebetszeiten.csv',
     iqamahOffsets: { dhuhr: 10, asr: 10, maghrib: 5, isha: 0 },
     fajrIqamahFixed: "04:45",
     updateInterval: 1000
@@ -57,28 +58,44 @@
     return d;
   }
 
-  // ── CSV LADEN ───────────────────────────────────────────────
+  // ── GEÄNDERT: CSV LADEN & OFFLINE LOGIK ──────────────────────
   async function loadVaktijaData() {
     try {
-      const url = CONFIG.csvUrl + '?nocache=' + Date.now();
-      const response = await fetch(url, {
-        cache: 'no-store',
-        headers: { 'Cache-Control': 'no-cache', 'Pragma': 'no-cache' }
-      });
-      if (!response.ok) throw new Error('CSV Fehler ' + response.status);
+      // Cache-Buster (?t=...) sorgt für immer frische Daten
+      const url = CONFIG.csvUrl + '?t=' + Date.now();
+      const response = await fetch(url);
+      
+      if (!response.ok) throw new Error('Download Fehler');
+      
       const text = await response.text();
-      const rows = text.replace(/\r/g, "").split('\n').filter(row => row.length > 10);
-      const now = new Date();
-      const todayKey = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
-      const todayRow = rows.find(row => row.startsWith(todayKey));
-      if (todayRow) {
-        cachedPrayerTimes = todayRow.split(';');
-        renderPrayerTimes(cachedPrayerTimes);
-      }
+      
+      // Backup im LocalStorage speichern
+      localStorage.setItem('vaktija_cache', text);
+      
+      processVaktijaText(text);
+
     } catch (error) {
-      console.error("Vaktija CSV Error:", error);
+      console.warn("Offline-Modus: Lade gespeicherten Cache...");
+      const backup = localStorage.getItem('vaktija_cache');
+      if (backup) {
+        processVaktijaText(backup);
+      }
     }
   }
+
+  function processVaktijaText(text) {
+    const rows = text.replace(/\r/g, "").split('\n').filter(row => row.length > 10);
+    const now = new Date();
+    // Sucht Format: 2026-05-11
+    const todayKey = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
+    const todayRow = rows.find(row => row.trim().startsWith(todayKey));
+    
+    if (todayRow) {
+      cachedPrayerTimes = todayRow.split(';');
+      renderPrayerTimes(cachedPrayerTimes);
+    }
+  }
+  // ────────────────────────────────────────────────────────────
 
   function renderPrayerTimes(cols) {
     const fields = {
@@ -87,6 +104,7 @@
     };
     for (const [id, val] of Object.entries(fields)) {
       const el = document.getElementById(id);
+      // .substring(0, 5) schneidet die Sekunden (:00) ab
       if (el && val) el.textContent = val.trim().substring(0, 5);
     }
     setIqamah('time-iqamah-fajr', CONFIG.fajrIqamahFixed);
@@ -265,7 +283,7 @@
     loadVaktijaData();
     runEngine();
     setInterval(runEngine, CONFIG.updateInterval);
-    setInterval(loadVaktijaData, 5 * 60 * 1000);
+    setInterval(loadVaktijaData, 10 * 60 * 1000); // Alle 10 Min prüfen
   }
 
   if (document.readyState === 'loading') {
