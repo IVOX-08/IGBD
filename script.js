@@ -5,7 +5,7 @@
     // HIER GEÄNDERT: Dein neuer GitHub Raw-Link
     csvUrl: 'https://raw.githubusercontent.com/IVOX-08/juply6202/refs/heads/main/Gebetszeiten.csv',
     iqamahOffsets: { dhuhr: 10, asr: 10, maghrib: 5, isha: 0 },
-    fajrIqamahFixed: "04:45",
+    fajrIqamahFixed: "04:30",
     updateInterval: 1000
   };
 
