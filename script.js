@@ -4,8 +4,8 @@
   const CONFIG = {
     // HIER GEÄNDERT: Dein neuer GitHub Raw-Link
     csvUrl: 'https://raw.githubusercontent.com/IVOX-08/juply6202/refs/heads/main/Gebetszeiten.csv',
-    iqamahOffsets: { dhuhr: 10, asr: 10, maghrib: 5, isha: 0 },
-    fajrIqamahFixed: "05:15",
+    iqamahOffsets: { dhuhr: 10, asr: 10, maghrib: 5, isha: 10 },
+    fajrIqamahFixed: "06:00",
     updateInterval: 1000
   };
 
