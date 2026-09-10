@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IGBD Vaktija — App herunterladen</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="Logo.png">
+    <meta name="theme-color" content="#00612F">
+
+    <!--
+        DIESE SEITE IST FÜR DEN FERNSEHER GEBAUT, für nichts anderes.
+
+        Sie hängt an keiner anderen Datei: kein device-detect.js, kein style-tv.css,
+        kein script.js. Damit kann an ihr nichts kaputtgehen, wenn an der
+        Gebetszeiten-Seite etwas geändert wird — und umgekehrt.
+
+        Drei Dinge bestimmen jede Entscheidung hier:
+
+        1. SIE SCROLLT NIE. Eine Wand hat niemanden, der wischt. Alle Maße sind in
+           vh/vmin, deshalb sitzt sie auf 720p, 1080p und 4K gleich.
+        2. ÜBERSCHUSSRAND. Ältere Fernseher schneiden bis zu 5 % am Rand ab. Nichts
+           Wichtiges kommt der Kante näher als das.
+        3. DER CODE IST DAS MOTIV. Er wird aus mehreren Metern gescannt, also ist er
+           so groß wie der Platz erlaubt, auf reinem Weiß, mit Ruhezone rundherum —
+           und nichts liegt darüber.
+    -->
+    <style>
+        :root {
+            --green:      #008348;   /* IZ zelena */
+            --green-deep: #00401f;
+            --gold:       #D4AF37;
+            --ink:        #0f1a13;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;              /* nichts scrollt, nie */
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background:
+                radial-gradient(120% 90% at 12% 8%, #0a9c58 0%, transparent 60%),
+                linear-gradient(160deg, var(--green) 0%, var(--green-deep) 100%);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Ein ruhiger Lichtschein hinter der Mitte, damit die Fläche nicht flach wirkt. */
+        body::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(60% 60% at 50% 55%, rgba(255,255,255,.07), transparent 70%);
+            pointer-events: none;
+        }
+
+        .stage {
+            position: relative;
+            width: 90vw;                   /* Überschussrand: 5 % je Seite */
+            height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 5vw;
+        }
+
+        /* ---------- links: wer es ist und was man tun soll ---------- */
+
+        .intro {
+            flex: 1 1 42%;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .crest {
+            width: 20vh;
+            height: 20vh;
+            border-radius: 50%;
+            background: #fff;
+            padding: 1.4vh;
+            box-shadow: 0 1.2vh 3vh rgba(0,0,0,.28);
+            margin-bottom: 3vh;
+        }
+        .crest img { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+        .wordmark {
+            font-size: 7.4vh;
+            font-weight: 900;
+            line-height: .98;
+            letter-spacing: -.02em;
+        }
+
+        .place {
+            font-size: 2.5vh;
+            font-weight: 700;
+            color: var(--gold);
+            margin-top: .6vh;
+            letter-spacing: .01em;
+        }
+
+        .rule {
+            width: 9vh;
+            height: .55vh;
+            background: var(--gold);
+            border-radius: 1vh;
+            margin: 3.4vh 0;
+        }
+
+        .call {
+            font-size: 4vh;
+            font-weight: 800;
+            line-height: 1.2;
+        }
+
+        /* ---------- rechts: die beiden Codes ---------- */
+
+        .codes {
+            flex: 0 0 auto;
+            display: flex;
+            gap: 3.4vw;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 2.4vh;
+            padding: 2.2vh 2.2vh 2.6vh;
+            box-shadow: 0 2vh 5vh rgba(0,0,0,.3);
+            text-align: center;
+        }
+
+        /* Der Code selbst. Reines Weiß rundherum gehört dazu — ohne diese Ruhezone
+           findet eine Kamera die drei Ecken nicht zuverlässig. */
+        .card img {
+            display: block;
+            width: 34vh;
+            height: 34vh;
+            image-rendering: pixelated;    /* harte Kanten statt weichgezeichneter Module */
+        }
+
+        /* Die Plattform ist die Hauptinformation: sie sagt, WELCHEN der beiden Codes
+           man nehmen muss. Der App-Name darunter ist nur die Bestaetigung, dass man
+           im Store richtig gelandet ist -- also kleiner. */
+        .platform {
+            display: block;
+            margin-top: 1.8vh;
+            font-size: 4.2vh;
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -.01em;
+            color: var(--ink);
+        }
+
+        .appname {
+            display: block;
+            margin-top: .8vh;
+            font-size: 2.2vh;
+            font-weight: 700;
+            color: #5f7268;
+        }
+
+        /* ---------- sehr breite oder sehr schmale Bildschirme ---------- */
+
+        /* Hochkant oder schmal (jemand ruft die Seite doch am Handy auf):
+           untereinander statt nebeneinander, und dann darf gescrollt werden. */
+        @media (max-aspect-ratio: 11/10) {
+            html, body { overflow: auto; height: auto; }
+            body { padding: 6vh 5vw; }
+            .stage {
+                width: 100%;
+                height: auto;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 4vh;
+            }
+            .intro { align-items: center; }
+            .crest { width: 16vh; height: 16vh; }
+            .wordmark { font-size: 5.4vh; }
+            .rule { margin: 2.4vh auto; }
+            .codes { flex-wrap: wrap; justify-content: center; gap: 4vh; }
+            .card img { width: 30vh; height: 30vh; }
+            .platform { font-size: 3.4vh; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="stage">
+
+        <div class="intro">
+            <div class="crest"><img src="Logo.png" alt="IGBD-Gemeinde Sandžak-Kassel"></div>
+
+            <div class="wordmark">IGBD Vaktija</div>
+            <div class="place">Gemeinde Sandžak&nbsp;Kassel</div>
+
+            <div class="rule"></div>
+
+            <div class="call">Laden Sie die App herunter</div>
+        </div>
+
+        <div class="codes">
+
+            <div class="card">
+                <img src="qr-iphone.png" alt="QR-Code für iPhone">
+                <span class="platform">iPhone</span>
+                <span class="appname">IGBD Vaktija</span>
+            </div>
+
+            <div class="card">
+                <img src="qr-android.png" alt="QR-Code für Android">
+                <span class="platform">Android</span>
+                <span class="appname">Kassel Vaktija</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>
