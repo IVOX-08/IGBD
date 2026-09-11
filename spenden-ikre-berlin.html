@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spenden — Bosniakische Gemeinde IKRE Berlin e.V.</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#0FA69B">
+
+    <!--
+        Diese Seite öffnet sich, wenn jemand in der App bei der Gemeinde Berlin auf
+        "Spenden" tippt. Sie wird also auf einem TELEFON gelesen, im Stehen.
+
+        WARUM ES DIESE SEITE ÜBERHAUPT GIBT
+        Die App erwartet hinter "Spenden" eine Internetadresse — bei Kassel ist das
+        PayPal. Berlin hat kein PayPal, sondern ein Bankkonto. Statt die App dafür zu
+        ändern und auf die nächste Google-Prüfung zu warten, zeigt diese Seite die
+        Bankdaten. Sie funktioniert mit der App, die heute im Store steht.
+
+        DER GIROCODE IST DER EIGENTLICHE PUNKT. Niemand tippt 22 Zeichen ab, während
+        er im Moscheeeingang steht. Jede deutsche Banking-App erkennt diesen Code:
+        scannen, und Empfänger, IBAN und Verwendungszweck stehen schon im Formular.
+        Der Betrag bleibt leer — den bestimmt der Spender.
+
+        Die Farben sind die von IKRE Berlin (Türkis und Sand), nicht die von Kassel.
+        Es ist ihre Spendenseite.
+    -->
+    <style>
+        :root {
+            --teal:  #0FA69B;
+            --teal-deep: #0b7a72;
+            --sand:  #C9A227;
+            --page:  #f3efe9;
+            --card:  #ffffff;
+            --ink:   #1a1a1a;
+            --muted: #6b7280;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--page);
+            color: var(--ink);
+            min-height: 100vh;
+            padding: 26px 16px 40px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .sheet { max-width: 520px; margin: 0 auto; }
+
+        header { text-align: center; margin-bottom: 22px; }
+
+        .logo {
+            width: 108px;
+            height: 108px;
+            object-fit: contain;
+            margin: 0 auto 12px;
+            display: block;
+        }
+
+        h1 {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--teal-deep);
+            line-height: 1.3;
+        }
+
+        .sub {
+            margin-top: 4px;
+            font-size: .9rem;
+            font-weight: 600;
+            color: var(--muted);
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 18px;
+            padding: 22px 18px 24px;
+            box-shadow: 0 3px 14px rgba(0,0,0,.07);
+            text-align: center;
+        }
+
+        .card h2 {
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--teal-deep);
+            margin-bottom: 4px;
+        }
+
+        .hint {
+            font-size: .85rem;
+            color: var(--muted);
+            line-height: 1.45;
+            margin-bottom: 16px;
+        }
+
+        /* Reines Weiß rundherum gehört zum Code — ohne diese Ruhezone findet die
+           Kamera der Banking-App die Ecken nicht zuverlässig. */
+        .giro {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            margin: 0 auto;
+            display: block;
+            background: #fff;
+            border: 1px solid rgba(0,0,0,.08);
+            border-radius: 12px;
+            padding: 8px;
+        }
+
+        .rows {
+            margin-top: 22px;
+            text-align: left;
+            border-top: 1px solid rgba(0,0,0,.08);
+            padding-top: 18px;
+        }
+
+        .row { margin-bottom: 14px; }
+        .row:last-child { margin-bottom: 0; }
+
+        .label {
+            display: block;
+            font-size: .72rem;
+            font-weight: 700;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 3px;
+        }
+
+        /* Kontonummern liest man Ziffer für Ziffer — Tabellenziffern, damit keine
+           schmaler ist als die andere, und umbruchfest in Vierergruppen. */
+        .value {
+            font-size: 1.02rem;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            word-break: break-word;
+        }
+
+        .copy {
+            display: block;
+            width: 100%;
+            margin-top: 18px;
+            padding: 15px;
+            border: 0;
+            border-radius: 12px;
+            background: var(--teal);
+            color: #fff;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 800;
+            cursor: pointer;
+        }
+        .copy:active { background: var(--teal-deep); }
+        .copy.done { background: var(--sand); }
+
+        footer {
+            margin-top: 22px;
+            text-align: center;
+            font-size: .8rem;
+            color: var(--muted);
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sheet">
+
+        <header>
+            <img src="logo-ikre-berlin.png" alt="IKRE Berlin" class="logo"
+                 onerror="this.style.display='none'">
+            <h1>Bosniakische Gemeinde<br>IKRE Berlin e.V.</h1>
+            <p class="sub">Bošnjačka Zajednica IKRE Berlin e.V.</p>
+        </header>
+
+        <div class="card">
+
+            <h2>Mit der Banking-App spenden</h2>
+            <p class="hint">
+                Code in Ihrer Banking-App scannen — Empfänger und IBAN werden
+                automatisch ausgefüllt. Den Betrag bestimmen Sie selbst.
+            </p>
+
+            <img src="girocode-ikre-berlin.png" alt="GiroCode zum Scannen" class="giro">
+
+            <div class="rows">
+                <div class="row">
+                    <span class="label">Kontoinhaber</span>
+                    <span class="value">Bosniakische Gemeinde IKRE Berlin e.V.</span>
+                </div>
+                <div class="row">
+                    <span class="label">IBAN</span>
+                    <span class="value" id="iban">DE90 1005 0000 0190 2181 50</span>
+                </div>
+                <div class="row">
+                    <span class="label">BIC</span>
+                    <span class="value">BELADEBEXXX</span>
+                </div>
+                <div class="row">
+                    <span class="label">Bank</span>
+                    <span class="value">Berliner Sparkasse</span>
+                </div>
+            </div>
+
+            <button class="copy" id="copy">IBAN kopieren</button>
+
+        </div>
+
+        <footer>
+            Džemat IKRE Berlin<br>
+            Möge Allah Ihre Spende annehmen.
+        </footer>
+
+    </div>
+
+    <script>
+        // Ohne Leerzeichen in die Zwischenablage: so will es jede Banking-App.
+        // Die Anzeige behält die Vierergruppen, weil man die vorlesen kann.
+        (function () {
+            var btn = document.getElementById('copy');
+            var iban = document.getElementById('iban').textContent.replace(/\s+/g, '');
+
+            btn.addEventListener('click', function () {
+                function done() {
+                    btn.textContent = 'IBAN kopiert ✓';
+                    btn.classList.add('done');
+                    setTimeout(function () {
+                        btn.textContent = 'IBAN kopieren';
+                        btn.classList.remove('done');
+                    }, 2500);
+                }
+
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(iban).then(done, fallback);
+                } else {
+                    fallback();
+                }
+
+                // Ältere Browser in eingebetteten Ansichten können navigator.clipboard
+                // nicht — dann über ein verstecktes Feld, statt den Knopf tot zu lassen.
+                function fallback() {
+                    var t = document.createElement('textarea');
+                    t.value = iban;
+                    t.setAttribute('readonly', '');
+                    t.style.position = 'absolute';
+                    t.style.left = '-9999px';
+                    document.body.appendChild(t);
+                    t.select();
+                    try { document.execCommand('copy'); done(); } catch (e) { /* still nichts */ }
+                    document.body.removeChild(t);
+                }
+            });
+        })();
+    </script>
+
+</body>
+</html>
